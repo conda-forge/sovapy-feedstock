@@ -12,13 +12,16 @@ source:
 build:
   skip: true  # [py<311 or win]
   script: bash run_install_mac_linux.sh; {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 1
+  number: 2
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
     - make
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}      # [build_platform != target_platform]
+    - numpy                                  # [build_platform != target_platform]
   host:
     - python
     - setuptools
@@ -45,7 +48,6 @@ test:
     - pip check
   requires:
     - pip
-    - python
 
 about:
   home: https://github.com/MotokiShiga/sova-cui
